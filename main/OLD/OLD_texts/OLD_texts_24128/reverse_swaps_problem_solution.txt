@@ -1,0 +1,12 @@
+((123))
+((abc)) #2
+((ab)c) #3
+((AB)c)
+((--)c)
+
+Проблема между #2 & #3. Решение - идем до тупика.
+Проверяем все сссылки шаблона по циклу:
+Если LAST_templ_swap.link_value == FIRST_templ_swap.link_value - НЕ КОЛЛИЗИЯ -
+ - Заменяем по шаблону
+ - LAST_templ_swap.link_value -> LAST_templ_swap.link_name
+ИНАЧЕ - Вернуть коллизию (+инфа и бла-бла-бла)

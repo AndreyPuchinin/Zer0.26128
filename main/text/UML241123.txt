@@ -1,0 +1,118 @@
+@startuml
+
+abstract class ZeroEntity {
+    + get_fields() : list
+}
+
+class LinkData {
+    + the_link: str
+    + pos: List[int]
+    + __init__(the_link: str, pos: List[int])
+    + get_fields() : list
+}
+
+class Link {
+    + non_terminals: LinkData
+    + terminals: LinkData
+    + __init__(non_terminals: LinkData, terminals: LinkData)
+    + get_fields() : list
+}
+
+class Template {
+    + name: str
+    + val: str
+    + links: List[Link]
+    + __init__(name: str, val: str, links: List[Link])
+    + get_fields() : list
+}
+
+class SelfRef {
+    + name: str
+    + vals: List[str]
+    + links: List[Link]
+    + __init__(name: str, vals: List[str], links: List[Link])
+    + get_fields() : list
+}
+
+class Card {
+    + name: str
+    + usual_vals: List[str]
+    + selfrefs: List[SelfRef]
+    + templates: List[Template]
+    + __init__(name: str, usual_vals: List[str], selfrefs: List[SelfRef], templates: List[Template])
+    + get_fields() : list
+}
+
+class Errors {
+    + _errors: List[str]
+    + _no_errors: str
+    + __init__()
+    + get_fields() : list
+    + no_errors() : list
+    + errors_caught()
+    + collision(terminal: str, non_terminals: List[str]) : list
+}
+
+class Swap {
+    + prev_str: str
+    + new_str: str
+    + replaceable
+    + replacing
+    + pos
+    + card: Card
+    + __init__(prev_str: str, new_str: str, replaceable, replacing, pos, card: Card)
+    + get_fields() : list
+}
+
+class ResStrStruct {
+    + first_str: str
+    + last_successful: str
+    + user_str: str
+    + __init__(first_str: str, last_successful: str, user_str: str)
+    + get_fields() : list
+}
+
+class Result {
+    + swaps: List[Swap]
+    + res_str: ResStrStruct
+    + errors: Errors
+    + __init__(swaps: List[Swap], res_str: ResStrStruct, errors: Errors)
+    + get_fields() : list
+}
+
+class Parser {
+    + _cards: List[Card]
+    + _first_str: str
+    + _user_str: str
+    + _str: str
+    + _swaps: List[Swap]
+    + _errors: Errors
+    + _res: Result
+    + __init__(cards: List[Card], inp_str: str)
+    + start_warp_drive(user_str: str) : Result
+}
+
+ZeroEntity <|-- LinkData
+ZeroEntity <|-- Link
+ZeroEntity <|-- Template
+ZeroEntity <|-- SelfRef
+ZeroEntity <|-- Card
+ZeroEntity <|-- Errors
+ZeroEntity <|-- Swap
+ZeroEntity <|-- ResStrStruct
+ZeroEntity <|-- Result
+
+LinkData "1" -- "1" Link : non_terminals
+LinkData "1" -- "1" Link : terminals
+Link "1" -- "*" Template : links
+SelfRef "1" -- "*" Link : links
+Card "1" -- "*" SelfRef : selfrefs
+Card "1" -- "*" Template : templates
+Result "1" -- "1" ResStrStruct : res_str
+Result "1" -- "1" Errors : errors
+Result "1" -- "*" Swap : swaps
+Parser "1" -- "*" Card : _cards
+Parser "1" -- "1" Errors : _errors
+Parser "1" -- "1" Result : _res
+
+@enduml
